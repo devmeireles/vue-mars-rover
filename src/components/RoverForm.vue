@@ -1,11 +1,6 @@
 <template>
   <div class="rover-form px-4">
     <h1 class="text-3xl text-green-400 font-semibold mb-4">Mars Rover</h1>
-    <p class="description text-sm text-gray-200 p-0">
-      Landing Position: 1 2 N <br />
-      Instruction: LMLMLMLMM <br />
-      Final Position: 1 3 N <br />
-    </p>
 
     <form @submit.prevent="submitForm">
       <div class="mb-6">
@@ -50,12 +45,15 @@
           >Instructions are required.</span
         >
       </div>
-      <button
-        type="submit"
-        class="w-full py-2 px-4 bg-green-400 text-white rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-200"
-      >
-        Start Rover
-      </button>
+      <div class="pt-4">
+        <button
+          type="submit"
+          :disabled="v$.$error"
+          class="w-full py-2 px-4 bg-green-400 text-white rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-200"
+        >
+          Start Rover
+        </button>
+      </div>
     </form>
   </div>
 </template>
