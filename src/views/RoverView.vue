@@ -1,12 +1,6 @@
 <template>
-  <div class="rover-view min-h-screen flex flex-row items-stretch gap-12 p-24">
-    <RoverForm
-      :plateauSize="plateauSize"
-      :landingPosition="landingPosition"
-      :instructions="instructions"
-      :finalPosition="finalPosition"
-      @startRover="startRover"
-    />
+  <div class="rover-view min-h-screen grid grid-cols-[45%_1fr] gap-12 p-24">
+    <RoverForm @startRover="startRover" />
 
     <div class="response flex flex-col items-center gap-6">
       <ExploreResult v-if="finalPosition" :finalPosition="finalPosition" />
@@ -23,7 +17,7 @@ import RoverForm from '@/components/RoverForm.vue'
 import Rover from '@/helpers/rover.helper'
 
 export default {
-  name: "RoverView",
+  name: 'RoverView',
   components: {
     RoverForm,
     ExploreResult,
@@ -31,16 +25,24 @@ export default {
   },
   data() {
     return {
-      plateauSize: 5,
-      landingPosition: '1 2 N',
-      instructions: 'LMLMLMLMM',
+      formData: {
+        plateauSize: 0,
+        landingPosition: '',
+        instructions: ''
+      },
       finalPosition: '',
       exploredMap: [] as number[][]
     }
   },
   methods: {
-    startRover() {
-      const rover = new Rover(this.plateauSize, this.landingPosition, this.instructions)
+    startRover(formData: any) {
+      Object.assign(this.formData, formData)
+
+      const rover = new Rover(
+        this.formData.plateauSize,
+        this.formData.landingPosition,
+        this.formData.instructions
+      )
       rover.start()
 
       if (rover.finalPosition) {

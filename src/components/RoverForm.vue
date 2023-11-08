@@ -1,39 +1,54 @@
 <template>
   <div class="rover-form px-4">
     <h1 class="text-3xl text-green-400 font-semibold mb-4">Mars Rover</h1>
-    <form @submit.prevent="startRover">
-      <div class="mb-4">
+    <p class="description text-sm text-gray-200 p-0">
+      Landing Position: 1 2 N <br />
+      Instruction: LMLMLMLMM <br />
+      Final Position: 1 3 N <br />
+    </p>
+
+    <form @submit.prevent="submitForm">
+      <div class="mb-6">
         <label for="plateauSize" class="block text-sm font-medium text-gray-200"
           >Plateau Size:</label
         >
         <input
           type="number"
           id="plateauSize"
-          :value="plateauSize"
+          v-model="formData.plateauSize"
           class="mt-1 p-2 rounded-md border border-gray-300 focus:ring focus:ring-green-200 focus:border-green-100 focus:outline-none w-full"
         />
+        <span class="text-red-300" v-if="v$.formData.plateauSize.$error"
+          >Plateau size is required and must be numeric.</span
+        >
       </div>
-      <div class="mb-4">
+      <div class="mb-6">
         <label for="landingPosition" class="block text-sm font-medium text-gray-200"
           >Landing Position:</label
         >
         <input
           type="text"
           id="landingPosition"
-          :value="landingPosition"
+          v-model="formData.landingPosition"
           class="mt-1 p-2 rounded-md border border-gray-300 focus:ring focus:ring-green-200 focus:border-green-100 focus:outline-none w-full"
         />
+        <span class="text-red-300" v-if="v$.formData.landingPosition.$error"
+          >Landing position is required and must be between 5 and 7 characters.</span
+        >
       </div>
-      <div class="mb-4">
+      <div class="mb-6">
         <label for="instructions" class="block text-sm font-medium text-gray-200"
           >Instructions:</label
         >
         <input
           type="text"
           id="instructions"
-          :value="instructions"
+          v-model="formData.instructions"
           class="mt-1 p-2 rounded-md border border-gray-300 focus:ring focus:ring-green-200 focus:border-green-100 focus:outline-none w-full"
         />
+        <span class="text-red-300" v-if="v$.formData.instructions.$error"
+          >Instructions are required.</span
+        >
       </div>
       <button
         type="submit"
@@ -46,15 +61,44 @@
 </template>
 
 <script lang="ts">
+import { useVuelidate } from '@vuelidate/core'
+import { required, numeric, minValue } from '@vuelidate/validators'
+
 export default {
-  props: {
-    plateauSize: Number,
-    landingPosition: String,
-    instructions: String
+  data() {
+    return {
+      v$: useVuelidate(),
+      formData: {
+        plateauSize: 0,
+        landingPosition: '',
+        instructions: ''
+      }
+    }
+  },
+  validations: {
+    formData: {
+      plateauSize: {
+        required,
+        numeric,
+        minValue: minValue(1)
+      },
+      landingPosition: {
+        required
+      },
+      instructions: {
+        required
+      }
+    }
   },
   methods: {
-    startRover() {
-      this.$emit('startRover')
+    submitForm() {
+      this.v$.$touch()
+
+      console.log(this.v$)
+
+      if (this.v$.$invalid) return
+
+      this.$emit('startRover', this.formData)
     }
   }
 }
