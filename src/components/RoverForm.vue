@@ -96,8 +96,8 @@ export default {
   watch: {
     'formData.landingPosition': {
       handler(value) {
-        this.formData.landingPosition = value.replace(/\s/g, "")
-      },
+        this.formData.landingPosition = value.replace(/\s/g, '')
+      }
     }
   },
   methods: {
