@@ -5,7 +5,7 @@
     <div class="response flex flex-col items-center gap-6">
       <ExploreResult v-if="finalPosition" :finalPosition="finalPosition" />
 
-      <ExploreMap v-if="exploredMap" :exploredMap="exploredMap" />
+      <ExploreMap v-if="exploredMap" :exploredMap="exploredMap.reverse()" />
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
       const rover = new Rover(
         this.formData.plateauSize,
         this.formData.landingPosition,
-        this.formData.instructions
+        this.formData.instructions.trim()
       )
       rover.start()
 

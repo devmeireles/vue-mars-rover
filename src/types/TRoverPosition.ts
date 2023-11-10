@@ -1,5 +1,5 @@
 export type TRoverPosition = {
-  x: number;
-  y: number;
-  direction: string;
+  x: number
+  y: number
+  direction: string
 }
