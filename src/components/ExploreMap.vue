@@ -7,7 +7,7 @@
         v-for="(cell, cellIndex) in row"
         :key="cellIndex"
       >
-        {{ cell === 1 ? cell : null }}
+        {{ cell > 0 ? cell : null }}
       </div>
     </div>
   </div>

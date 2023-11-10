@@ -41,9 +41,9 @@
           v-model="formData.instructions"
           class="mt-1 p-2 rounded-md border border-gray-300 focus:ring focus:ring-green-200 focus:border-green-100 focus:outline-none w-full"
         />
-        <span class="text-red-300" v-if="v$.formData.instructions.$error"
-          >Instructions are required.</span
-        >
+        <span class="text-red-300" v-if="v$.formData.instructions.$error">
+          Instructions are required.
+        </span>
       </div>
       <div class="pt-4">
         <button
@@ -59,8 +59,9 @@
 </template>
 
 <script lang="ts">
+import { landingPositionValidator } from '@/helpers/landing.validator'
 import { useVuelidate } from '@vuelidate/core'
-import { required, numeric, minValue } from '@vuelidate/validators'
+import { required, numeric, minValue, helpers } from '@vuelidate/validators'
 
 export default {
   data() {
@@ -81,18 +82,27 @@ export default {
         minValue: minValue(1)
       },
       landingPosition: {
-        required
+        required,
+        landingPositionValidator: helpers.withMessage(
+          'Landing Position is out of pattern',
+          landingPositionValidator
+        )
       },
       instructions: {
         required
       }
     }
   },
+  watch: {
+    'formData.landingPosition': {
+      handler(value) {
+        this.formData.landingPosition = value.replace(/\s/g, "")
+      },
+    }
+  },
   methods: {
     submitForm() {
       this.v$.$touch()
-
-      console.log(this.v$)
 
       if (this.v$.$invalid) return
 

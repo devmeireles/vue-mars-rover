@@ -40,14 +40,14 @@ class Rover {
 	 * @returns {TRoverPosition | undefined} The parsed landing position.
 	 */
 	private parseLanding(landingPosition: string): TRoverPosition | undefined {
-		const landingPositionArr = landingPosition.split(" ");
+		const landingPositionArr = Array.from(landingPosition);
 
 		if (landingPositionArr.length < 3) return;
 
 		const response: TRoverPosition = {
 			x: Number(landingPositionArr[0]),
 			y: Number(landingPositionArr[1]),
-			direction: landingPositionArr[2],
+			direction: landingPositionArr[2].toUpperCase(),
 		}
 
 		return response;
@@ -106,18 +106,13 @@ class Rover {
 	private deployRover(plateau: number[][], landedPosition: TRoverPosition, instructions: string) {
 		let currentPosition = landedPosition;
 
-		const markPosition = (x: number, y: number, step: number) => {
-			if (x >= 0 && y >= 0) {
-				plateau[x][y] = step;
-			}
-		};
-
-		markPosition(currentPosition.x, currentPosition.y, 1);
+		plateau[currentPosition.x][currentPosition.y] = 1;
 
 		Array.from(instructions).forEach((instruction) => {
 			if (instruction === "M") {
 				const newPosition = this.move(currentPosition);
-				markPosition(newPosition.x, newPosition.y, 1);
+				plateau[currentPosition.x][currentPosition.y] = 1;
+				console.log(plateau);
 				currentPosition = newPosition;
 				this.currentPosition = currentPosition;
 			} else if (instruction === "L" || instruction === "R") {
